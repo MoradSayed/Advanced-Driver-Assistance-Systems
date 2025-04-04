@@ -1,10 +1,11 @@
-import numpy as np
 from rclpy.node import Node
 from std_msgs.msg import Float64
-from kbh import KeyboardHandler   
+
+from .kbh import KeyboardHandler
+from .adas import ADAS
 
 class Manager:
-    def __init__(self, node: Node):
+    def __init__(self, node: Node, use_kb:bool):
         self.node = node
         
         self.vel_pub = node.create_publisher(Float64, "/cmd_vel"      , 10)
@@ -19,29 +20,28 @@ class Manager:
         self.vdriver = VehicleDriver(self)
         self.node.create_timer(0.01, lambda: print(self.vdriver, end=""))
         node.create_subscription(Float64, "/get_vel", lambda val: self.vdriver._set_act_speed(val.data), 10)
-        KeyboardHandler(
-            up_func         = self.vdriver.accelerate_func,
-            down_func       = self.vdriver.reverse_func,
-            left_func       = self.vdriver.left_func,
-            right_func      = self.vdriver.right_func,
-            neutral_ud_func = self.vdriver.neu_ud,
-            neutral_lr_func = self.vdriver.neu_lr,
-        )
+        if use_kb:
+            KeyboardHandler(
+                up_func         = self.vdriver.accelerate_func,
+                down_func       = self.vdriver.reverse_func,
+                left_func       = self.vdriver.left_func,
+                right_func      = self.vdriver.right_func,
+                neutral_ud_func = self.vdriver.neu_ud,
+                neutral_lr_func = self.vdriver.neu_lr,
+            )
 
         #* ADAS
-        # self.auto_speed = 60.0
-        # self.auto_brake = 1.0
-        # self.auto_steer = 0.5
+        self.adas = ADAS(self)
 
-    def speed_manager(self, value):
+    def speed_manager(self, value: float):
         self.spd_msg.data = value
         self.vel_pub.publish(self.spd_msg)
 
-    def brake_manager(self, value):
+    def brake_manager(self, value: float):
         self.brk_msg.data = value
         self.brk_pub.publish(self.brk_msg)
 
-    def steer_manager(self, value):
+    def steer_manager(self, value: float):
         self.str_msg.data = value
         self.str_pub.publish(self.str_msg)
     

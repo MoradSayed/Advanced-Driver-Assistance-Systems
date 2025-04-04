@@ -2,13 +2,14 @@
 
 import rclpy, time
 from rclpy.node import Node
+import argparse
 
-from manager import Manager
+from .manager import Manager
 
 class Controller(Node):
-    def __init__(self):
+    def __init__(self, use_kb):
         super().__init__("Vehicle_Controller")
-        Manager(self)
+        self.man = Manager(self, use_kb)
 
     def run(self):
         rclpy.spin(self)        
@@ -17,8 +18,10 @@ class Controller(Node):
 
 def main():
     rclpy.init()
-    cont = Controller()
-    cont.run()
 
-if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--kb', type=int, default=1)
+    parsed_args, _ = parser.parse_known_args()
+    
+    cont = Controller(bool(parsed_args.kb))
+    cont.run()

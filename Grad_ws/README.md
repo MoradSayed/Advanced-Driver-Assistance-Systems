@@ -50,6 +50,9 @@ Grad_ws/
 3. **Launch the Simulation:**
 
     ```bash
-    ros2 launch vehicle_controller vehicle_controller
+    ros2 run vehicle_controller adas
+
+    # Optional param: --kb 0  (used to disable keyboard interface)
+    ros2 run vehicle_controller adas --kb 0
     ```
 4. **Feel free to edit and try your own algorithm!!**
