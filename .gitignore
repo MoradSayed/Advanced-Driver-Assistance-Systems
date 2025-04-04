@@ -1,0 +1,48 @@
+# ROS2 workspace build artifacts
+build/
+install/
+log/
+
+# Python cache files
+__pycache__/
+*env/
+*.pyc
+*.pyo
+*.pyd
+
+# VSCode and JetBrains IDEs
+.vscode/
+.idea/
+*.code-workspace
+*.swp  # Vim swap files
+
+# CMake and Make build files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# ROS2 package-specific files
+ament_cmake_core/
+ament_cmake_env_hooks/
+ament_cmake_export_dependencies/
+ament_cmake_export_interfaces/
+ament_cmake_export_libraries/
+ament_cmake_include_directories/
+ament_cmake_libraries/
+ament_cmake_python/
+ament_cmake_symlink_install/
+
+# Logs and debugging artifacts
+*.log
+*.bag
+*.db3
+
+# Webots specific files
+.*.wbproj
+.*.jpg
+
+# Custom folders/files
+*.ignore/
+autonomous_vehicle/
+conv_autonomous_vehicle/
+temp*.*
