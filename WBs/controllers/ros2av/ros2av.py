@@ -5,12 +5,13 @@ from rclpy.node import Node
 from std_msgs.msg import Float64
 
 from vehicle import Driver
-    
+
 from dataclasses import dataclass
 from vehicle_controller import VeController
 from camera_dev import CameraDev
 from lidar_dev import LidarDev
 from gps_dev import GPSdev, DisplayDev
+from pos_dev import WheelOdom
 
 TIME_STEP = 50
 
@@ -20,6 +21,7 @@ class Devices_DC:
     lidar   : LidarDev     = None
     gps     : GPSdev       = None
     # display : DisplayDev   = None
+    odom    : WheelOdom    = None
 
 class Manager(Node):
     def __init__(self, speed_range:tuple = (-20.0, 60.0), steering_range:tuple = (-0.5, 0.5)):
@@ -77,6 +79,12 @@ class Manager(Node):
         print("-" * 70)
         for topic, msg_type, range in subscribers:
             print(f"{topic:<20} {msg_type:<30} {range:<20}")
+
+    def get_device_names(self):
+        device_count = self.driver.getNumberOfDevices()
+        device_names = [self.driver.getDeviceByIndex(i).getName() for i in range(device_count)]
+        for d in device_names:
+            print(d)
 
     def run(self):
         i = 0
