@@ -60,7 +60,7 @@ class VehicleDriver:
         self.act_spd = speed
 
     def accelerate_func(self):
-        if self.act_spd > -0.001:
+        if self.act_spd > -0.1:
             self.brake = 0.0
             self.speed = 60.0
         else:
@@ -71,7 +71,7 @@ class VehicleDriver:
         self.manager.brake_manager(self.brake)
 
     def reverse_func(self):
-        if self.act_spd > 0.001:
+        if self.act_spd > 0.1:
             self.speed = 0.0
             self.brake = 1.0
         else:
