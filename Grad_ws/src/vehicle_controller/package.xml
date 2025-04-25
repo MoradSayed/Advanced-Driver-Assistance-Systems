@@ -4,8 +4,8 @@
   <name>vehicle_controller</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="Morad.S.Singer@gmail.com">morad</maintainer>
-  <license>TODO: License declaration</license>
+  <maintainer email="Morad.S.Singer@gmail.com">Morad Sayed</maintainer>
+  <license>BSD-3-Clause</license>
 
   <depend>rclpy</depend>
   <depend>pynput</depend>

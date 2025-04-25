@@ -1,5 +1,9 @@
 #! /usr/bin/python3.10
 
+"""
+Copyright (c) 2025, Morad Sayed. BSD 3-Clause License (see LICENSE file).
+"""
+
 import math, numpy as np, rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64

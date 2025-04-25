@@ -13,10 +13,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='morad',
+    maintainer='Morad Sayed',
     maintainer_email='Morad.S.Singer@gmail.com',
     description='TODO: Package description',
-    license='TODO: License declaration',
+    license='BSD 3-Clause',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
