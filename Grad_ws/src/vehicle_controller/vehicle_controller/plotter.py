@@ -16,6 +16,8 @@ class Plot:
         self.add_point: Callable[[float, float], None] = self._init_point
 
     def _init_point(self, y, t):
+        if t == 0.0:
+            return    # bad reference, skip.
         self.start_time = t
         self._append_point(y, t)
         self.add_point = self._append_point
@@ -27,8 +29,8 @@ class Plot:
         if y > self.plot_point and self.timer_instance == None: # needs to happen only once
             self.timer_instance = self.create_timer(3, self.plot)    # wait for 3 sec then trigger the plotting
 
-    def plot(self, title="Distance vs Time", xlabel="Time (t)", ylabel="Distance (m)"):
-        """Display the Y vs T graph."""
+    def plot(self, title="Distance vs Time", xlabel="Time (s)", ylabel="Distance (m)"):
+        """Display the X vs T graph."""
         if not self.t_values or not self.y_values:
             raise ValueError("No data to plot. Add some points first.")
         
@@ -36,7 +38,7 @@ class Plot:
         self.timer_instance.destroy()
 
         plt.figure(figsize=(8, 4))
-        plt.plot(self.t_values, self.y_values, marker='o', linestyle='-', color='green', label='Y(t)')
+        plt.plot(self.t_values, self.y_values, marker='o', linestyle='-', color='green', label='X(t)')
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)

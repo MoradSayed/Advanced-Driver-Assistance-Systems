@@ -3,6 +3,7 @@ if TYPE_CHECKING:
     from .manager import Manager
 from std_msgs.msg import Float64
 
+from .Wheel_speed import WheelSpeed
 from .plotter import Plot
 from .pid_controller import PID
 
@@ -14,7 +15,7 @@ class ADAS:
 
         self.actual_speed = lambda: manager.vdriver.act_spd
         
-        manager.node.create_subscription(Float64, "/odom", lambda dist: self.process(dist.data), 10)
+        self.ws_sensor = WheelSpeed(manager, self.process, 0.374)   # (tire radius = 0.374) obtained from the BmwX5Wheel.proto. https://github.com/cyberbotics/webots/blob/9b5ed70644d66a2b405a039a521899b511102611/projects/vehicles/protos/bmw/BmwX5Wheel.proto
         
         self.current_time = 0.0
         manager.node.create_subscription(Float64, "/wbts_time", 
