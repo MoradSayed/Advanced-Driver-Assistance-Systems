@@ -53,6 +53,9 @@ class Manager(Node):
         self.driver.setAntifogLights(True)
         self.driver.setWiperMode(Driver.SLOW)
 
+        self.sim_time = self.create_publisher(Float64, "/wbts_time", 10)
+        self.time_msg = Float64()
+
         self.create_subscription(Float64, "/cmd_vel"      , lambda value: self.controller.set_speed(value.data)           , 10)
         self.create_subscription(Float64, "/brakes"       , lambda value: self.controller.set_brake_force(value.data)     , 10)
         self.create_subscription(Float64, "/SteeringAngle", lambda value: self.controller.set_steering_angle(value.data)  , 10)
@@ -94,6 +97,8 @@ class Manager(Node):
         i = 0
         while self.driver.step() != -1:
             if i % (TIME_STEP // int(self.driver.getBasicTimeStep())) == 0:
+                self.time_msg.data = self.driver.getTime()
+                self.sim_time.publish(self.time_msg)
                 for ins in self.sensors.__dict__.values():
                     ins.process_data()
                 rclpy.spin_once(self, timeout_sec=0.01)

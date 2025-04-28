@@ -1,4 +1,4 @@
-import math
+import math, numpy as np
 from rclpy.node import Node
 from controller import GPS, Display
 from std_msgs.msg import Float64
@@ -23,7 +23,7 @@ class GPSdev(GPS):
     def process_data(self):     # compute_gps_speed
         self.gps_speed = self.getSpeed() * 3.6
         
-        self.spd_msg.data = self.gps_speed
+        self.spd_msg.data = self.gps_speed * np.sign(self.node.driver.getCurrentSpeed())    # gps_speed has no sign (direction)
         self.spd_pub.publish(self.spd_msg)
         
         self.gps_coords = self.getValues()
@@ -42,7 +42,7 @@ class DisplayDev(Display):
     def update_display(self, gps_coords, gps_speed):
         NEEDLE_LENGTH = 50.0
         self.imagePaste(self.speedometer_image, 0, 0, False)
-        current_speed = self.getCurrentSpeed()
+        current_speed = self.getCurrentSpeed() / 5      #! problem here. why is the speed return scaled?!
         if math.isnan(current_speed):
             current_speed = 0.0
         alpha = current_speed / 260.0 * 3.72 - 0.27

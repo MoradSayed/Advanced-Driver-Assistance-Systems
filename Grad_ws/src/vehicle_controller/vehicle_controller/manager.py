@@ -87,7 +87,7 @@ class VehicleDriver:
 
     @request_x_action
     def accelerate_func(self):
-        if self.act_spd > -0.001:
+        if self.act_spd > -0.1:
             self.brake = 0.0
             self.speed = 60.0
         else:
@@ -99,7 +99,7 @@ class VehicleDriver:
 
     @request_x_action
     def reverse_func(self):
-        if self.act_spd > 0.001:
+        if self.act_spd > 0.1:
             self.speed = 0.0
             self.brake = 1.0
         else:
