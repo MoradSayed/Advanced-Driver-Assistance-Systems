@@ -6,6 +6,7 @@ from std_msgs.msg import Float64
 from .Wheel_speed import WheelSpeed
 from .plotter import Plot
 from .pid_controller import PID
+from .lidar import LidarSensor
 
 class ADAS:
     def __init__(self, manager: "Manager"):
@@ -23,10 +24,13 @@ class ADAS:
                                          10)    #? to be replaced with real time in practical trials
 
         Target_distance = 200
-        self.graph = Plot(plot_point = Target_distance, timer_creator = manager.node.create_timer)
-        self.accel_controller = PID(2, 0.0011, 0.0085, Target_distance, (0, 60))
+        # self.graph = Plot(plot_point = Target_distance, timer_creator = manager.node.create_timer)
+        # self.accel_controller = PID(2, 0.0011, 0.0085, Target_distance, (0, 60))
+        
+        self.lidar = LidarSensor(manager)
 
     def process(self, distance_traveled):
-        pedal = self.accel_controller.compute(distance_traveled, self.current_time)
-        self.speed_pub(float(pedal))
-        self.graph.add_point(distance_traveled, self.current_time)
+        # pedal = self.accel_controller.compute(distance_traveled, self.current_time)
+        # self.speed_pub(float(pedal))
+        # self.graph.add_point(distance_traveled, self.current_time)
+        pass
