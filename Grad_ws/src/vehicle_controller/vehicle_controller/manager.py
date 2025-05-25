@@ -2,7 +2,7 @@ from rclpy.node import Node
 from std_msgs.msg import Float64
 
 from .kbh import KeyboardHandler
-from .adas import ADAS
+from .ros_bridge import ADAS  # type: ignore
 
 class Manager:
     def __init__(self, node: Node, use_kb:bool):

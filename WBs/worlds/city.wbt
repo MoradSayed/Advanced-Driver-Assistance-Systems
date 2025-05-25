@@ -606,7 +606,7 @@ CurvedRoadSegment {
   leftBarrier TRUE
   curvatureRadius 40.5
 }
-BmwX5 {
+DEF WEBOTS_VEHICLE0 BmwX5 {
   translation -45 45.88 0.4
   rotation 0 0 1 3.14159
   controller "ros2av"
@@ -1526,4 +1526,16 @@ Crossroad {
 }
 SumoInterface {
   maxVehicles 7
+}
+DEF SUMO_VEHICLE0 TeslaModel3Simple {
+  name "WEBOTS_VEHICLE1"
+}
+DEF SUMO_VEHICLE1 LincolnMKZSimple {
+  name "WEBOTS_VEHICLE2"
+}
+DEF SUMO_VEHICLE2 RangeRoverSportSVRSimple {
+  name "WEBOTS_VEHICLE3"
+}
+DEF SUMO_VEHICLE3 MercedesBenzSprinterSimple {
+  name "WEBOTS_VEHICLE4"
 }
