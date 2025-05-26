@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from .manager import Manager
+    from ..manager import Manager
 import numpy as np
 
 from sensor_msgs.msg import LaserScan

@@ -1,7 +1,7 @@
 from rclpy.node import Node
 from std_msgs.msg import Float64
 
-from .kbh import KeyboardHandler
+from .driver.kbh import KeyboardHandler
 from .ros_bridge import ADAS  # type: ignore
 
 class Manager:

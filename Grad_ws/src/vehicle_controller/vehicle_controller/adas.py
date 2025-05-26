@@ -3,10 +3,10 @@ if TYPE_CHECKING:
     from .manager import Manager
 from std_msgs.msg import Float64
 
-from .Wheel_speed import WheelSpeed
+from .sensors.Wheel_speed import WheelSpeed
+from .sensors.lidar import LidarSensor
 from .plotter import Plot
-from .pid_controller import PID
-from .lidar import LidarSensor
+from .closed_loop.pid_controller import PID
 
 class ADAS:
     def __init__(self, manager: "Manager"):
