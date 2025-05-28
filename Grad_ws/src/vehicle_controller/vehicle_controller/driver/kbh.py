@@ -1,12 +1,13 @@
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..manager import Manager
+
+from std_msgs.msg import Float64
 from pynput import keyboard
 
 class KeyboardHandler:
     """
-    Handles keyboard input and stores key states using bitwise operations.
-    
-    ### Usage  
-    - `keyboard_handler.get_binary_state()`  # Get the pressed keys in binary form (up down left right)
-    - Functions for key events can be passed during initialization.
+    Used to listen for presses and releases to allow for the control of the vehicle with a keyboard
     """
 
     KEY_MAP = {
@@ -16,18 +17,20 @@ class KeyboardHandler:
         keyboard.Key.right: 1 << 0  # 0001 (1)
     }
 
-    def __init__(self, up_func=lambda: None, down_func=lambda: None, left_func=lambda: None, right_func=lambda: None, 
-                 neutral_ud_func=lambda: None, neutral_lr_func=lambda: None):
+    def __init__(self, manager:"Manager"):
+
+        self.vdriver = VehicleDriver(manager)
+        manager.node.create_subscription(Float64, "/get_vel", lambda val: self.vdriver._set_act_speed(val.data), 10)
 
         self.pressed_keys = 0  # Stores key states as a 4-bit integer
         self.func_map = {
-            keyboard.Key.up: up_func,
-            keyboard.Key.down: down_func,
-            keyboard.Key.left: left_func,
-            keyboard.Key.right: right_func
+            keyboard.Key.up:    self.vdriver.accelerate_func,
+            keyboard.Key.down:  self.vdriver.reverse_func,
+            keyboard.Key.left:  self.vdriver.left_func,
+            keyboard.Key.right: self.vdriver.right_func
         }
-        self.neutral_ud_func = neutral_ud_func  # No UP or DOWN pressed
-        self.neutral_lr_func = neutral_lr_func  # No LEFT or RIGHT pressed
+        self.neutral_ud_func = self.vdriver.neu_ud  # No UP or DOWN pressed
+        self.neutral_lr_func = self.vdriver.neu_lr  # No LEFT or RIGHT pressed
 
         self.listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         self.listener.start()  # Non-blocking
@@ -70,3 +73,103 @@ class KeyboardHandler:
 
     def get_binary_state(self):
         return format(self.pressed_keys, '04b')         # Convert integer to binary string
+
+    def __repr__(self):
+        return self.vdriver
+
+class VehicleDriver:
+    """
+    Used to simulate an analog control with a digital device like a `keyboard`
+    """
+    #! still need some performance optimizations
+    def __init__(self, manager: "Manager"):
+        self.manager = manager
+
+        self.speed = 0.0
+        self.brake = 0.0
+        self.steer = 0.0
+
+        self.act_spd = 0.0
+
+        self.x_command = lambda _: None
+        self.y_command = lambda _: None
+        self.tx, self.ty = True, True
+        self.timer = manager.node.create_timer(0.01, self.timer_callback)
+
+    def timer_callback(self):
+        if self.tx:
+            self.x_command(self)
+        if self.ty:
+            self.y_command(self)
+
+    def request_x_action(func):
+        def wrapper(self: "VehicleDriver", *args, **kwargs):
+            self.tx = False     # cancel
+            func(self, *args, **kwargs)
+            self.x_command = func
+            self.tx = True      # reset
+        return wrapper
+
+    def request_y_action(func):
+        def wrapper(self: "VehicleDriver", *args, **kwargs):
+            self.ty = False     # cancel
+            func(self, *args, **kwargs)
+            self.y_command = func
+            self.ty = True      # reset
+        return wrapper
+
+    @request_x_action
+    def accelerate_func(self):
+        if self.act_spd > -0.1:
+            self.brake = 0.0
+            self.speed = 1.0
+        else:
+            self.speed = 0.0
+            self.brake = 1.0
+
+        self.manager.speed_manager(self.speed)
+        self.manager.brake_manager(self.brake)
+
+    @request_x_action
+    def reverse_func(self):
+        if self.act_spd > 0.1:
+            self.speed = 0.0
+            self.brake = 1.0
+        else:
+            self.brake = 0.0
+            self.speed = -0.3
+
+        self.manager.speed_manager(self.speed)
+        self.manager.brake_manager(self.brake)
+
+    @request_y_action
+    def right_func(self):
+        self.steer = (80.0 - self.act_spd) / 80.0
+        self.manager.steer_manager(self.steer)
+
+    @request_y_action
+    def left_func(self):
+        self.steer = - (80.0 - self.act_spd) / 80.0
+        self.manager.steer_manager(self.steer)
+
+    @request_x_action
+    def neu_ud(self):
+        self.speed = 0.0
+        self.brake = 0.0
+        self.manager.speed_manager(self.speed)
+        self.manager.brake_manager(self.brake)
+
+    @request_y_action
+    def neu_lr(self):
+        self.steer = 0.0
+        self.manager.steer_manager(self.steer)
+
+    def _set_act_speed(self, speed):
+        """ 
+        ### DON'T USE THIS VARIABLE FOR VEHICLE PURPOSES  
+        ONLY USED TO PROVIDE BETTER KEYBOARD CONTROLS
+        """
+        self.act_spd = speed
+
+    def __repr__(self):
+        return f"vel: {self.speed}, brk: {self.brake}, str: {self.steer:.2f}"
