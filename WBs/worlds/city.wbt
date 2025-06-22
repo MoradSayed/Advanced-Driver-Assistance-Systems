@@ -1525,7 +1525,8 @@ Crossroad {
   ]
 }
 SumoInterface {
-  maxVehicles 7
+  gui FALSE
+  maxVehicles 4
 }
 DEF SUMO_VEHICLE0 TeslaModel3Simple {
   name "WEBOTS_VEHICLE1"
