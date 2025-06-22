@@ -43,6 +43,14 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/traffic/protos/HighwaySign.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/obstacles/protos/OilBarrel.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/road/protos/Crossroad.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/default/protos/SumoInterface.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/bmw/BmwX5Simple.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/lincoln/LincolnMKZSimple.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/range_rover/RangeRoverSportSVRSimple.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/toyota/ToyotaPriusSimple.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/tesla/TeslaModel3Simple.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/citroen/CitroenCZeroSimple.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/mercedes_benz/MercedesBenzSprinterSimple.proto"
 
 WorldInfo {
   info [
@@ -598,7 +606,7 @@ CurvedRoadSegment {
   leftBarrier TRUE
   curvatureRadius 40.5
 }
-BmwX5 {
+DEF WEBOTS_VEHICLE0 BmwX5 {
   translation -45 45.88 0.4
   rotation 0 0 1 3.14159
   controller "ros2av"
@@ -649,7 +657,7 @@ GenericTrafficLight {
   startGreen FALSE
   greenTime 10
   redTime 10
-  state "green"
+  state "red"
 }
 CrossRoadsTrafficLight {
   translation 45 -45 0
@@ -1515,4 +1523,20 @@ Crossroad {
     "7"
     "6"
   ]
+}
+SumoInterface {
+  gui FALSE
+  maxVehicles 4
+}
+DEF SUMO_VEHICLE0 TeslaModel3Simple {
+  name "WEBOTS_VEHICLE1"
+}
+DEF SUMO_VEHICLE1 LincolnMKZSimple {
+  name "WEBOTS_VEHICLE2"
+}
+DEF SUMO_VEHICLE2 RangeRoverSportSVRSimple {
+  name "WEBOTS_VEHICLE3"
+}
+DEF SUMO_VEHICLE3 MercedesBenzSprinterSimple {
+  name "WEBOTS_VEHICLE4"
 }

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from .manager import Manager
+    from ..manager import Manager
 
 from typing import Callable
 from example_interfaces.msg import Float64MultiArray

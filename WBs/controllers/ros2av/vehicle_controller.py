@@ -43,5 +43,4 @@ class VeController:
         a value from 0 (no brakes) to 1 (full brakes)
         """
         for b in self.brakes:
-            b.setDampingConstant(normalized_force*1200)
-
+            b.setDampingConstant(normalized_force*1800)     # 1800 from proto `brakeCoefficient`

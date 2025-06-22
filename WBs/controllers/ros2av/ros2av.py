@@ -28,7 +28,7 @@ class Devices_DC:
     odom    : WheelOdom    = None
 
 class Manager(Node):
-    def __init__(self, speed_range:tuple = (-20.0, 60.0), steering_range:tuple = (-0.5, 0.5)):
+    def __init__(self, speed_range:tuple = (-20.0, 100.0), steering_range:tuple = (-0.5, 0.5)):
         rclpy.init()
         super().__init__("AV_Manager")
 
