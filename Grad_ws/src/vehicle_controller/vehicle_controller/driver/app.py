@@ -19,7 +19,7 @@ methods = None
 class APKController:
     def __init__(self, manager:"Manager"):
         global methods
-        methods = (manager.steer_manager, manager.speed_manager, manager.brake_manager, lambda _: None)
+        methods = (manager.steer_manager, manager.speed_manager, manager.brake_manager, lambda x: manager.adas.toggle_acc(x))
         threading.Thread(
             target=lambda: socketio.run(app, host='0.0.0.0', port=5555), 
             daemon=True
