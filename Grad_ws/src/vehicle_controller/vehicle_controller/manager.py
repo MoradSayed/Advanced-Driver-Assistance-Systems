@@ -5,7 +5,7 @@ from .driver.kbh import KeyboardHandler
 from .driver.app import APKController
 from .ros_bridge import ADAS  # type: ignore
 
-MAX_VELOCITY = 60       # Adjustable
+MAX_VELOCITY = 100       # Adjustable
 MAX_STEER_ANGEL = 0.5   # Fixed - based on vehicle
 
 class Manager:
