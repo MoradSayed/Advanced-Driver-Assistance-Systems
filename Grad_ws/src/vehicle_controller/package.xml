@@ -8,8 +8,9 @@
   <license>BSD-3-Clause</license>
 
   <depend>rclpy</depend>
-  <depend>pynput</depend>
   <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>example_interfaces</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

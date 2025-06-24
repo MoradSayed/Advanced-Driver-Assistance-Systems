@@ -1,0 +1,6 @@
+pynput
+matplotlib
+flask
+flask_socketio
+eventlet
+numpy

@@ -11,7 +11,15 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'setuptools',
+        'pynput',
+        'matplotlib',
+        'flask',
+        'flask_socketio',
+        'eventlet',
+        'numpy'
+        ],
     zip_safe=True,
     maintainer='Morad Sayed',
     maintainer_email='Morad.S.Singer@gmail.com',
