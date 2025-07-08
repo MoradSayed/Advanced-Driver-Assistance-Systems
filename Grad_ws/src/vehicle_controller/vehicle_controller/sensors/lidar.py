@@ -32,7 +32,7 @@ class LidarSensor():
             self.end_index = min(len(ranges) - 1, middle_index + num_angles)
 
             self._process_callback = self.process_lidar_angle
-            self.process_lidar_angle(scan_data=scan_data)
+            # self.process_lidar_angle(scan_data=scan_data)
         else:
             #? Method 2: Area constraints (Rectangle Shape)
             self.rad_angles = scan_data.angle_min + np.arange(len(ranges)) * scan_data.angle_increment
@@ -40,7 +40,7 @@ class LidarSensor():
             self.max_range = scan_data.range_max
 
             self._process_callback = self.process_lidar_rect
-            self.process_lidar_rect(scan_data=scan_data)
+            # self.process_lidar_rect(scan_data=scan_data)
 
     def process_lidar_angle(self, scan_data: LaserScan):
         ranges = np.array(scan_data.ranges, dtype=np.float32)

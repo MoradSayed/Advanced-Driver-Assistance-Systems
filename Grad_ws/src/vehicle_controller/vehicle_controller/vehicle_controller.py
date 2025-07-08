@@ -41,6 +41,7 @@ class Controller(Node):
     def __init__(self, use_kb):
         super().__init__("Vehicle_Controller")
         self.man = Manager(self, use_kb)
+        print("Ready...")
 
     def run(self):
         rclpy.spin(self)        

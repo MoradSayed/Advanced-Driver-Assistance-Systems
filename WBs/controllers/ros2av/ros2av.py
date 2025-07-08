@@ -17,11 +17,11 @@ from lidar_dev import LidarDev
 from gps_dev import GPSdev, DisplayDev
 from pos_dev import WheelOdom
 
-TIME_STEP = 50
+TIME_STEP = 20
 
 @dataclass
 class Devices_DC:
-    camera  : CameraDev    = None
+    # camera  : CameraDev    = None
     lidar   : LidarDev     = None
     gps     : GPSdev       = None
     # display : DisplayDev   = None
@@ -30,7 +30,7 @@ class Devices_DC:
 class Manager(Node):
     def __init__(self, speed_range:tuple = (-20.0, 100.0), steering_range:tuple = (-0.5, 0.5)):
         rclpy.init()
-        super().__init__("AV_Manager")
+        super().__init__("Ego_Vehicle")
 
         self.speedlim = speed_range
         self.steerlim = steering_range
