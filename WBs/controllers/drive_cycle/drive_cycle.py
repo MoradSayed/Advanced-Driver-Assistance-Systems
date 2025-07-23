@@ -6,7 +6,7 @@ Copyright (c) 2025, Morad Sayed. BSD 3-Clause License (see LICENSE file).
 
 import rclpy, os
 from rclpy.node import Node
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Bool
 from vehicle import Driver
 import csv
 
@@ -38,6 +38,7 @@ class Cycle(Node):
 
         self.index = 0
 
+        self.remote_controller()
         self.run()
 
     def get_target_speed(self):
@@ -45,6 +46,11 @@ class Cycle(Node):
         if self.index < len(self.drive_cycle) and self.drive_cycle[self.index][0]-offset < self.driver.getTime():
             self.current_speed = self.drive_cycle[self.index][1]
             self.index+=1
+
+    def remote_controller(self):
+        self.create_subscription(Bool, "/pause"   , lambda value: self.driver.simulationSetMode(self.driver.SIMULATION_MODE_PAUSE)    , 10)
+        self.create_subscription(Bool, "/realtime", lambda value: self.driver.simulationSetMode(self.driver.SIMULATION_MODE_REAL_TIME), 10)
+        self.create_subscription(Bool, "/fast"    , lambda value: self.driver.simulationSetMode(self.driver.SIMULATION_MODE_FAST)     , 10)
 
     def run(self):
         i = 0
@@ -55,9 +61,8 @@ class Cycle(Node):
                 self.vel_msg.data = self.current_speed
                 # self.vel_msg.data = self.driver.getCurrentSpeed()
                 self.vel_pub.publish(self.vel_msg)
+            rclpy.spin_once(self, timeout_sec=0.01)
             i += 1
-            # if self.driver.getTime() > 12:
-            #     self.driver.simulationReset()
 
 def main():
     Cycle()

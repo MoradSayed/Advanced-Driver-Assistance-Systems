@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .manager import Manager
 
-from std_msgs.msg import Float64, Float32
+from std_msgs.msg import Float64, Float32, Bool
 import matplotlib.pyplot as plt
 
 from .sensors.Wheel_speed import WheelSpeed
@@ -18,6 +18,10 @@ class ADAS:
         self.acc_speed = 1  # 0.6
 
         # self.ws_sensor = WheelSpeed(manager, self.process, 0.374)   # (tire radius = 0.374) obtained from the BmwX5Wheel.proto. https://github.com/cyberbotics/webots/blob/9b5ed70644d66a2b405a039a521899b511102611/projects/vehicles/protos/bmw/BmwX5Wheel.proto
+
+        self.pause_pub=manager.node.create_publisher(Bool, "/pause", 10)
+        self.rt_pub=manager.node.create_publisher(Bool, "/realtime", 10)
+        self.fast_pub=manager.node.create_publisher(Bool, "/fast", 10)
 
         self.current_time = 0.0
         manager.node.create_subscription(
@@ -69,6 +73,7 @@ class ADAS:
 
     def plot_graphs(self):
         """ t, y, z, a >> """
+        self.pause_pub.publish(Bool(data=True))
         self.graph.plot(self.distance_time)
         self.graph.plot(self.vel_time, title = "Velocity x Velocity", ylabel="Velocity (km/h)")
 
