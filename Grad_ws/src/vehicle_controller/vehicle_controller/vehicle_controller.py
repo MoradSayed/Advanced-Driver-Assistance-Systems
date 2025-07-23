@@ -41,12 +41,17 @@ class Controller(Node):
     def __init__(self, use_kb):
         super().__init__("Vehicle_Controller")
         self.man = Manager(self, use_kb)
-        print("Ready...")
+        self.get_logger().info("Ready...")
 
     def run(self):
-        rclpy.spin(self)        
-        self.destroy_node()
-        rclpy.shutdown()
+        try:
+            rclpy.spin(self)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.destroy_node()
+            if rclpy.ok():
+                rclpy.shutdown()
 
 def main():
     rclpy.init()

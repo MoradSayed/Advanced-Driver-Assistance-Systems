@@ -103,7 +103,7 @@ Viewpoint {
   orientation 0.164396282522738 0.03584087393329509 -0.9857430162311076 2.7182173636733946
   position 16.358650173814887 33.33761919411286 16.78380495948522
   near 1
-  follow "vehicle"
+  follow "ego_vehicle"
   followSmoothness 0
 }
 TexturedBackground {
@@ -596,7 +596,8 @@ Forest {
 DEF WEBOTS_VEHICLE0 BmwX5 {
   translation -5.24 10.64 0.4
   rotation 0 0 1 3.14159
-  controller "ros2av"
+  name "ego_vehicle"
+  controller "<extern>"
   sensorsSlotFront [
     SickLms291 {
       translation 0.06 0 0
@@ -618,7 +619,7 @@ DEF WEBOTS_VEHICLE1 BmwX5 {
   rotation 0 0 1 3.14159
   color 0.0685435 0.1449 0.66334
   name "lead_vehicle"
-  controller "drive_cycle"
+  controller "<extern>"
   supervisor TRUE
 }
 DEF SUMO_VEHICLE0 RangeRoverSportSVRSimple {

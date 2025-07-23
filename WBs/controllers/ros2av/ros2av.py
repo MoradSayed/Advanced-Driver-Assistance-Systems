@@ -95,13 +95,13 @@ class Manager(Node):
 
     def run(self):
         i = 0
-        while self.driver.step() != -1:
-            if i % (TIME_STEP // int(self.driver.getBasicTimeStep())) == 0:
+        while self.driver.step() != -1: #? `Driver.step()` blocks your controller until the world has advanced by one step.
+            if i % (TIME_STEP // int(self.driver.getBasicTimeStep())) == 0 and i > 0:   #? used to allow a slower controller rate than the world step rate.
                 self.time_msg.data = self.driver.getTime()
                 self.sim_time.publish(self.time_msg)
                 for ins in self.sensors.__dict__.values():
                     ins.process_data()
-                rclpy.spin_once(self, timeout_sec=0.01)
+            rclpy.spin_once(self, timeout_sec=0.01)
             i += 1
 
 

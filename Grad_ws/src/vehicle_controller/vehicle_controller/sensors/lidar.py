@@ -66,5 +66,5 @@ class LidarSensor():
         masked_ranges = np.where(valid, ranges, float('inf'))   # Apply mask: keep valid values, set others to inf
 
         min_distance = np.min(masked_ranges)
-        print("\r\033[K"+f"min_dist: {min_distance:.2f}", end="")
+        # print("\r\033[K"+f"min_dist: {min_distance:.2f}", end="") #TODO: find another way to display this value
         self.callback(min_distance)
