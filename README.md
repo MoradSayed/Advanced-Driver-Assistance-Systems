@@ -127,7 +127,7 @@ ADAS
     source ~/.bashrc
     ```
     </details>
-    <br>
+<!--     <br> -->
 
 4. Follow [Webots World](/WBs/README.md#how-to-run) Instructions.
 
