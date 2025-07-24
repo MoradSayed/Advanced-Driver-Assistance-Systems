@@ -1,12 +1,10 @@
 # Python-ROS2 Control System 
 
-This part of the project serves as the decision-making and control component of the autonomous vehicle system. It complements the Webots simulation by implementing algorithms for Adaptive Cruise Control (ACC) and Automatic Emergency Braking (AEB), leveraging ROS 2 for communication and control.
+This part of the project serves as the decision-making and control component of the autonomous vehicle system. It complements the Webots simulation by implementing algorithms for Adaptive Cruise Control (ACC), leveraging ROS 2 for communication and control.
 
 ## Features
 
 - **Adaptive Cruise Control (ACC)**: Dynamically adjusts vehicle speed to maintain a safe distance from the vehicle ahead.
-
-- **Automatic Emergency Braking (AEB)**: Detects potential collisions and triggers braking to prevent accidents.
 
 - **ROS 2 Integration**: Communicates with the Webots simulation via ROS 2 topics for seamless sensor data processing and control commands.
 
@@ -16,43 +14,40 @@ This part of the project serves as the decision-making and control component of 
 
 ```plaintext
 Grad_ws/
-├── src/
-│   └── vehicle_controller/
+├── src/vehicle_controller/
+│       ├── Launch/
+│       │   └── Sim_launch.py           # Simulation Launch file
 │       ├── vehicle_controller/
-│       │   ├── vehicle_controller.py   # Controller Entry point
-│       │   └── ...
+│       │   └── vehicle_controller.py   # Controller Entry point
 │       ├── package.xml
+│       ├── setup.cfg
 │       └── setup.py
 └── README.md
 ```
 
 ## How to Run
 
-1. **Build the ROS 2 Workspace:**
+1. Build the ROS 2 Workspace:
 
     ```bash
-    cd <REPO_ROOT>/Grad_ws/         # Replace <REPO_ROOT> with the location of the cloned repo
+    cd $GP_WS_DIR/Grad_ws/
     colcon build --symlink-install
     ```
 
-2. **Set Up the Environment:**
+2. Set Up the Environment:
 
     ```bash
-    source /opt/ros/humble/setup.bash
-    source install/setup.bash
-    
-    # Optional: Permanently add the sources to .bashrc
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
-    echo "source <REPO_ROOT>/Grad_ws/install/setup.bash" >> ~/.bashrc   # Replace <REPO_ROOT>
+    echo "source $GP_WS_DIR/Grad_ws/install/setup.bash" >> ~/.bashrc
     source ~/.bashrc
     ```
 
-3. **Launch the Simulation:**
+3. Launch the Simulation:
 
     ```bash
-    ros2 run vehicle_controller adas
-
-    # Optional param: --kb 0  (used to disable keyboard interface)
-    ros2 run vehicle_controller adas --kb 0
+    ros2 launch vehicle_controller Sim_launch.py
     ```
-4. **Feel free to edit and try your own algorithm!!**
+
+4. After the launch logs a **"Ready"** message, you can reset and run the webots simulation.
+
+5. **Feel free to edit and try your own algorithm!!**

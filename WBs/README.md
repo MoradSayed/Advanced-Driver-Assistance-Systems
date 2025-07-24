@@ -4,7 +4,7 @@ This Part of the project serves as the foundation for simulating the vehicle sid
 
 ## Features
 
-- **Camera and LiDAR Integration**: Real-time data from sensors for perception.
+- **LiDAR and WheelSpeed Integration**: Real-time data from sensors for perception.
 
 - **Vehicle Control**: Command-based control for steering, velocity, and braking.
 
@@ -14,60 +14,53 @@ This Part of the project serves as the foundation for simulating the vehicle sid
 
 ## ROS 2 Topics
 
-### Publishers and Subscribers
+### ros2av: Ego vehicle's controller - Publishers and Subscribers
 
 <div style="display: flex; justify-content: space-between;">
 
 <div style="width: 48%;">
 <strong>Publishers</strong>
-<table>
-<thead>
-<tr>
-<th>Topic Name</th>
-<th>Message Type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>/av_camera</code></td>
-<td><code>sensor_msgs/Image</code></td>
-</tr>
-<tr>
-<td><code>/av_lidar</code></td>
-<td><code>sensor_msgs/LaserScan</code></td>
-</tr>
-</tbody>
-</table>
+
+| Topic Name | Message Type | Description |
+| --- | --- | --- |
+| `/wbts_time` | `std_msgs/Float64` | Simulation timestamp |
+| `/get_vel` | `std_msgs/Float64` | Ego Vehicle's Velocity<br>Used for plots only |
+| `/av_lidar` | `sensor_msgs/LaserScan` | LiDAR data |
+| `/wheel_speed` | `example_interfaces`<br>`/Float64MultiArray` | Right and left wheel speed data |
 </div>
 
 <div style="width: 48%;">
 <strong>Subscribers</strong>
-<table>
-<thead>
-<tr>
-<th>Topic Name</th>
-<th>Message Type</th>
-<th>Range</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>/cmd_vel</code></td>
-<td><code>std_msgs/Float64</code></td>
-<td><code>(-20 : 60)</code></td>
-</tr>
-<tr>
-<td><code>/SteeringAngle</code></td>
-<td><code>std_msgs/Float64</code></td>
-<td><code>(-0.5 : 0.5)</code></td>
-</tr>
-<tr>
-<td><code>/brakes</code></td>
-<td><code>std_msgs/Float64</code></td>
-<td><code>(0 : 1)</code></td>
-</tr>
-</tbody>
-</table>
+
+| Topic Name | Message Type | Notes |
+| --- | --- | --- |
+| `/cmd_vel` | `std_msgs/Float64` | Range `(-20.0 : 100)` |
+| `/SteeringAngle` | `std_msgs/Float64` | Range `(-0.5 : 0.5)` |
+| `/brakes` | `std_msgs/Float64` | Range `(0 : 1)` |
+</div>
+
+</div>
+
+### drive_cycle: Lead vehicle's controller - Publishers and Subscribers
+
+<div style="display: flex; justify-content: space-between;">
+
+<div style="width: 48%;">
+<strong>Publishers</strong>
+
+| Topic Name | Message Type | Description |
+| --- | --- | --- |
+| `/lead_vel` | `std_msgs/Float32` | Lead Vehicle's Velocity<br>Used for plots only |
+</div>
+
+<div style="width: 48%;">
+<strong>Subscribers</strong>
+
+| Topic Name | Message Type | Notes |
+| --- | --- | --- |
+| `/pause` | `std_msgs/Bool` | `msg.data` is neglected |
+| `/realtime` | `std_msgs/Bool` | `msg.data` is neglected |
+| `/fast` | `std_msgs/Bool` | `msg.data` is neglected |
 </div>
 
 </div>
@@ -77,11 +70,13 @@ This Part of the project serves as the foundation for simulating the vehicle sid
 The `ros2av` directory contains the main python script that manages the autonomous vehicle. Below is an overview of the overall structure:
 ```plaintext
 WBs/
-├── controllers/  # Contains custom Webots controllers for simulating vehicle behavior.
-│   └── ros2av/       # Our Custom Controller directory.
-├── plugins/      # Includes Webots plugins for extending simulation capabilities.
-├── worlds/       # Houses Webots world files.
-│   └── city.wbt      # Webots world file.
+├── controllers/        # Contains custom Webots controllers for simulating vehicle behavior.
+│   ├── drive_cycle/        # Lead_Vehicle's Controller directory.
+│   └── ros2av/             # Ego_Vehicle's Controller directory.
+├── plugins/
+├── worlds/             # Houses Webots world files.
+│   ├── city.wbt            # Original map (deprecated)
+│   └── RoadTest.wbt        << Current Pick
 └── README.md
 ```
 
@@ -95,8 +90,10 @@ WBs/
 2. **Launch the Simulation**: 
     Navigate to the worlds directory and launch the simulator:
     ```bash
-    cd Advanced-Driver-Assistance-Systems/WBs/worlds/
-    webots city.wbt
+    cd $GP_WS_DIR/WBs/worlds/
+    webots RoadTest.wbt
     ```
 
-3. **Continue to [ROS2 Setup](../Grad_ws/README.md) instructions.**
+3. Pause the simulation for now
+
+3. Continue to [**ROS2 Setup**](../Grad_ws/README.md#how-to-run) instructions.
