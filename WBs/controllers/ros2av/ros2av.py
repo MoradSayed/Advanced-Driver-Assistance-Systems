@@ -101,7 +101,7 @@ class Manager(Node):
                 self.sim_time.publish(self.time_msg)
                 for ins in self.sensors.__dict__.values():
                     ins.process_data()
-            rclpy.spin_once(self, timeout_sec=0.01)
+                rclpy.spin_once(self, timeout_sec=0.0075)
             i += 1
 
 

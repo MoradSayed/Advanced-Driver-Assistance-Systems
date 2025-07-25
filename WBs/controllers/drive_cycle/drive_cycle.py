@@ -61,7 +61,7 @@ class Cycle(Node):
                 self.vel_msg.data = self.current_speed
                 # self.vel_msg.data = self.driver.getCurrentSpeed()
                 self.vel_pub.publish(self.vel_msg)
-            rclpy.spin_once(self, timeout_sec=0.01)
+                rclpy.spin_once(self, timeout_sec=0.001)
             i += 1
 
 def main():
