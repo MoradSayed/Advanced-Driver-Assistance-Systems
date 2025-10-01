@@ -14,12 +14,12 @@ MAX_VOLTAGE = 4.0      # max voltage
 board = pyfirmata.Arduino('/dev/ttyACM0')
 
 it = pyfirmata.util.Iterator(board)
-#print(1)
 it.start()
-#print(2)
 
-analog_input = board.get_pin('a:0:i')
-pin_pwm = board.get_pin('d:5:p')
+pin_pwm = board.get_pin('d:3:p')
+pin_switch = board.get_pin('d:13:i')
+# analog_input = board.get_pin('a:5:i')
+cd4053_pin_b = board.get_pin('d:7:o')
 
 
 class speed_voltage(Node):
@@ -30,13 +30,46 @@ class speed_voltage(Node):
         #i2c = busio.I2C(board.SCL, board.SDA)
         #self.dac = MCP4725(i2c)
 
-        self.create_subscription(Float64,'/cmd_vel',self.speed_callback, 10) 
+        self.callback_method = self.speed_callback # self.direct_callback
+        self.create_subscription(Float64,'/cmd_vel',lambda msg: self.callback_method(msg), 10) 
+
+        self.switch_state = False
+        self.switch_timer = self.create_timer(0.01, self.state_checker)
+        self.direct_timer = None
+        print(f"x -> Normal")
         
         #self.get_logger().info("speed_voltage_node started.")
         
+    def state_checker(self):
+        state = pin_switch.read()
+        if state != self.switch_state:
+            if state:
+                self.callback_method = lambda _: None
+                # self.direct_timer = self.create_timer(0.01, self.direct_callback)
+                self.direct_callback()
+                print(f"x -> direct")
+            else:
+                #? Op1: resume after letting go of the accelrator
+                # self.direct_timer.cancel()
+                # self.callback_method = self.speed_callback
+                #? Op2: stay disconnected after letting go of the accelrator
+                print(f"x -> stay_disconnected")
+                pass
+            # print(f"switch = {state}")
+        
+        self.switch_state = state
+
+    def direct_callback(self, msg=None):
+        # duty_cycle = analog_input.read()
+        # pin_pwm.write(duty_cycle)
+        # print(f"\r{duty_cycle}")
+        cd4053_pin_b.write(0)
+
+
     def speed_callback(self, msg):
         print("called")
-        speed =  msg.data      
+        cd4053_pin_b.write(1)
+        speed = msg.data      
         
         voltage = min(self.speed_to_voltage(speed) + 1, MAX_VOLTAGE)              # Convert speed to voltage 
         
@@ -62,6 +95,20 @@ class speed_voltage(Node):
 
     #def voltage_to_dac_value(self, voltage):
         #return int((DAC_RESOLUTION / MAX_VOLTAGE) * voltage)
+
+    def destroy_node(self):
+        # Ensure PWM goes low and the serial connection is closed
+        try:
+            if pin_pwm:
+                pin_pwm.write(0.0)
+        except Exception:
+            pass
+        try:
+            if board:
+                board.exit()
+        except Exception:
+            pass
+        super().destroy_node()
 
 
 
