@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+from glob import glob
 
 package_name = 'vehicle_interface'
 
@@ -10,17 +11,19 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/'+ package_name + '/launch', glob('launch/*.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='karim, Morad Sayed',
     maintainer_email='kraafat.m51@gmail.com, Morad.S.Singer@gmail.com',
     description='TODO: Package description',
-    license='TODO: License declaration',
+    license='BSD 3-Clause',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'accelerator = vehicle_interface.accelrator:main'
+            'actuators = vehicle_interface.Actuator_node:main',
+            'lcd = vehicle_interface.lcd_UI.UI:main'
         ],
     },
 )

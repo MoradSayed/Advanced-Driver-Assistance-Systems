@@ -1,0 +1,2 @@
+int8 set_state  # 0=Stop, 1=Pause, 2=Resume, 3=Start
+---

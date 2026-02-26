@@ -5,7 +5,10 @@
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="kraafat.m51@gmail.com">karim</maintainer>
-  <license>TODO: License declaration</license>
+  <maintainer email="Morad.S.Singer@gmail.com">Morad Sayed</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <depend>custom_ros2_interfaces</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

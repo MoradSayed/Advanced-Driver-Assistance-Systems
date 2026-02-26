@@ -1,0 +1,3 @@
+[submodule "Grad_ws/src/vehicle_interface/vehicle_interface/MR76_Radar"]
+	path = Grad_ws/src/vehicle_interface/vehicle_interface/MR76_Radar
+	url = git@github.com:MoradSayed/MR76_Radar.git

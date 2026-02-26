@@ -1,7 +1,8 @@
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, RegisterEventHandler, Shutdown
+from launch.actions import ExecuteProcess, RegisterEventHandler, Shutdown, DeclareLaunchArgument
 from launch.event_handlers import OnProcessExit
 from launch_ros.actions import Node
+from launch.substitutions import LaunchConfiguration
 import os
 import pathlib
 
@@ -14,6 +15,10 @@ def generate_launch_description():
     controller_dir = pathlib.Path(project_dir).resolve() / 'WBs/controllers/'
     ros2av_loc = str(controller_dir / 'ros2av/ros2av.py')
     drivecycle_loc = str(controller_dir / 'drive_cycle/drive_cycle.py')
+
+    # Declare arguments that can be set from CLI
+    speed_arg = DeclareLaunchArgument('speed', default_value='60', description='Set speed for ACC')
+    level_arg = DeclareLaunchArgument('level', default_value='1.5', description='Set timegap for ACC')
 
     # Define the Webots controller processes
     ego_controller = ExecuteProcess(
@@ -48,6 +53,11 @@ def generate_launch_description():
         executable='adas',
         name='Ego_vehicle',
         output='screen',
+        parameters=[{
+            'speed': LaunchConfiguration('speed'),
+            'level': LaunchConfiguration('level'),
+            'is_sim': True
+        }]
     )
 
     # Shared flags to track process exits
@@ -83,6 +93,8 @@ def generate_launch_description():
 
     # Return full launch description
     return LaunchDescription([
+        speed_arg,
+        level_arg,
         ego_controller,
         lead_controller,
         ego_node,

@@ -6,3 +6,6 @@ eventlet
 numpy
 scikit-fuzzy
 networkx
+scipy
+smbus
+gpiozero

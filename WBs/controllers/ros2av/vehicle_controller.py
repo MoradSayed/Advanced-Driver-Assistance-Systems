@@ -23,6 +23,13 @@ class VeController:
         self.speed = kmh
         self.driver.setCruisingSpeed(kmh)
 
+    def set_pedal(self, value):
+        value = max(0.0, min(1.0, value))
+
+        kmh = value * self.speedlim[1]
+        # print(f"--------------- setting pedal to {value: .2f} as {kmh: .2f} ---------------")
+        self.driver.setCruisingSpeed(kmh)
+        
     def set_steering_angle(self, rad):
         rad = max(self.steerlim[0], min(self.steerlim[1], rad))
 
