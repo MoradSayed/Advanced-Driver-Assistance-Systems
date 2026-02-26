@@ -28,7 +28,7 @@ class Devices_DC:
     odom    : WheelOdom    = None
 
 class Manager(Node):
-    def __init__(self, speed_range:tuple = (-20.0, 100.0), steering_range:tuple = (-0.5, 0.5)):
+    def __init__(self, speed_range:tuple = (-20.0, 180.0), steering_range:tuple = (-0.5, 0.5)):
         rclpy.init()
         super().__init__("Ego_Vehicle")
 
@@ -57,6 +57,7 @@ class Manager(Node):
         self.time_msg = Float64()
 
         self.create_subscription(Float64, "/cmd_vel"      , lambda value: self.controller.set_speed(value.data)           , 10)
+        self.create_subscription(Float64, "/cmd_pedal"    , lambda value: self.controller.set_pedal(value.data)           , 10)
         self.create_subscription(Float64, "/brakes"       , lambda value: self.controller.set_brake_force(value.data)     , 10)
         self.create_subscription(Float64, "/SteeringAngle", lambda value: self.controller.set_steering_angle(value.data)  , 10)
 

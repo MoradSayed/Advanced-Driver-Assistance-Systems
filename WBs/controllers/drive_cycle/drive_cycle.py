@@ -33,17 +33,17 @@ class Cycle(Node):
         # self.drive_cycle = [(0, 80)]
 
         #? Method 2
-        self.drive_cycle = load_drive_cycle_csv(os.path.join(os.path.dirname(__file__), "European_Transient_Cycle_(ETC)-p2.csv"))
-        self.current_speed = 30.09    #? first speed in the csv file
-
         self.index = 0
+        self.drive_cycle = load_drive_cycle_csv(os.path.join(os.path.dirname(__file__), "European_Transient_Cycle_(ETC)-p2.csv"))
+        self.current_speed = self.drive_cycle[self.index][1] #30.09  #? first speed in the csv file
+        self.time_offset = self.drive_cycle[self.index][0] # 1.766
 
         self.remote_controller()
         self.run()
 
     def get_target_speed(self):
-        offset = 1.766
-        if self.index < len(self.drive_cycle) and self.drive_cycle[self.index][0]-offset < self.driver.getTime():
+        
+        if self.index < len(self.drive_cycle) and self.drive_cycle[self.index][0]-self.time_offset < self.driver.getTime():
             self.current_speed = self.drive_cycle[self.index][1]
             self.index+=1
 

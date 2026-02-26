@@ -31,7 +31,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import rclpy, time
+import rclpy, time, os, json
+from datetime import datetime
 from rclpy.node import Node
 import argparse
 
@@ -47,7 +48,8 @@ class Controller(Node):
         try:
             rclpy.spin(self)
         except KeyboardInterrupt:
-            pass
+            with open(os.path.join(f"ACC_data_{datetime.now()}.json"), "w") as json_file:
+                json.dump(self.man.adas.data, json_file, default=str, indent=4)  
         finally:
             self.destroy_node()
             if rclpy.ok():

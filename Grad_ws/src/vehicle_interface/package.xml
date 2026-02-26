@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>vehicle_controller</name>
+  <name>vehicle_interface</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
+  <maintainer email="kraafat.m51@gmail.com">karim</maintainer>
   <maintainer email="Morad.S.Singer@gmail.com">Morad Sayed</maintainer>
   <license>BSD-3-Clause</license>
 
-  <depend>rclpy</depend>
-  <depend>std_msgs</depend>
-  <depend>sensor_msgs</depend>
-  <depend>example_interfaces</depend>
   <depend>custom_ros2_interfaces</depend>
 
   <test_depend>ament_copyright</test_depend>
